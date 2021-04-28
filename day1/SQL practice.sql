@@ -52,13 +52,13 @@ from job_history;
 select employee_id, first_name, last_name, first_name ||' '|| last_name
 from employees;
 
--- 조회 결과에 별칠을 붙여서 조회하기
+-- 조회 결과에 별칭을 붙여서 조회하기
 select employee_id, first_name || ' ' || last_name as full_name
 from employees;
 
 select employee_id, first_name || ' ' || last_name name
 from employess;
-select employee_id, first_name || ' ' | last_name as name
+select employee_id, first_name || ' ' || last_name as name
 from employess;
 select employees employee_id, first_name || ' '|| last_name name
 from employees;
