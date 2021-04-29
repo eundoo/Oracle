@@ -63,8 +63,8 @@ from employess;
 select employees employee_id, first_name || ' '|| last_name name
 from employees;
 
-사칙연산자 사용하기
-employees 테이블엥서 사원아이디, 이름,주급,월급 조회하기
+--사칙연산자 사용하기
+--employees 테이블에서 사원아이디, 이름,주급,월급 조회하기
 select employee_id, first_name, salary,salary*4,salary_of_month
 from employees;
 
@@ -82,7 +82,7 @@ where employee_id = 100;
 -- 이름이 Steven인 사원의 사원아이디, 이름, 직종아이디, 급여를 조회
 select employee_id, first_name, job_id, salary
 from employees
-wehre first_name = 'Steven'; --텍스트 값은 대소문자를 구분
+where first_name = 'Steven'; --텍스트 값은 대소문자를 구분
 
 -- 급여가 3000이하인 사원의 사원아이디, 이름, 직종아이디, 급여를 조회
 select employee_id, first_name, job_id, salary
