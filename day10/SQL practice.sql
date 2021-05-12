@@ -1,25 +1,25 @@
 -- 제약조건 정의하기
 -- 컬럼레벨 제약조건 정의방식 사용 (컬럼을 정의할 때 같이 제약조건까지 정의)
 create table sample_todos (
-    todo_no number(8) 
-    constraint sampletodos_no_pk primary key, -- 별칭정하기> 테이블이름_이름_pk 보통이렇게 정한다., 30자가 넘어서는 안된다.
-    todo_title varchar2(250) 
-    not null,
-    todo_writer varchar2(20) 
-    constraint sampletodos_writer_fk references sample_users (user_id), -- forign key라서 user_id만 들어갈 수 있다.
-    todo_day date not null,
-    todo_status varchar2(10) default '등록' 
-    constraint sampletodos__status_ck check(todo_status in('등록', '삭제', '완료')),
-    todo_text varchar2(1000)
-    constraint sampletodos_text_nn not null,
-    todo_created_date date default sysdate,
-    todo_completed_date date,
-    todo_deleted_date
+   todo_no number(8) 
+      constraint sampletodos_no_pk primary key, -- 별칭정하기> 테이블이름_이름_pk 보통이렇게 정한다., 30자가 넘어서는 안된다.
+   todo_title varchar2(250) 
+      not null,
+   todo_writer varchar2(20) 
+      constraint sampletodos_writer_fk references sample_users (user_id), -- forign key라서 user_id만 들어갈 수 있다.
+   todo_day date not null,
+   todo_status varchar2(10) default '등록'
+      constraint sampletodos_status_ck check (todo_status in ('등록', '삭제', '완료')),
+   todo_text varchar2(1000) 
+      constraint sampletodos_text_nn not null,
+   todo_created_date date default sysdate,
+   todo_completed_date date,
+   todo_deleted_date date
 );
 -- 생성된 테이블 삭제하기
 drop table sample_todos;
 
--- 테이블 레벨 제약조건 정의방식 사용
+-- 테이블 레벨 제약조건 정의방식 사용 (테이블 적고 제약조건을 따로 적음)
 create table sample_todos (
     todo_no number(8), 
     todo_title varchar2(250)               not null,
@@ -33,23 +33,23 @@ create table sample_todos (
     
     constraint sampletodos_no_pk        primary key (todo_no),
     constraint sampletodos_writer_fk    foreign key (todo_writer) references sample_users (user_id),
-    constraint sampletodos_status_ck    check (todo_status in ('등록', '완료', '삭제'))
-
+    constraint sampletodos_status_ck    check (todo_status in ('등록', '완료', '삭제')),
+    constraint sampletodos_text_nn not null
 );
 
--- 상품을 여러 종류 담을 수 있는 장바구니 테이블 정의하기'
+-- 상품을 여러 종류 담을 수 있는 장바구니 테이블 정의하기
 -- 이거보면 컬럼레벨제약조건이랑 테이블레벨제약조건이랑 같이 써도됨
-create table simple_cart_items (
+create table sample_cart_items (
     item_no number(8)               constraint cartitems_no_pk primary key,
     user_id varchar(20)             not null,
     product_no number(8)            not null,
     item_amount number(4)           default 1,
-    item_created___date             date default sysdate,
+    item_created_date               date default sysdate,
     
     constraint cartitems_userid_fk foreign key(user_id) references sample_users (user_id),
     constraint cartitems_productno_fk foreign key(product_no) references sample_products (product_no),
     constraint cartitems_uk unique (user_id, product_no)
-)
+);
 
 -- 시퀀스만들기 일련번호를 생성해준다.
 create sequence cartitem_seq nocache;
@@ -57,9 +57,14 @@ create sequence todo_seq nocache;
 
 -- sample_cart_items 테이블에 장바구니 상품정보 추가하기 / 2번 실행하면 고유키 제약조건 위배 에러가뜸
 insert into sample_cart_items
-(item_no, user_id, product_no, item.amount, item_create_date)
-values -- 여기 값 내꺼에 있는거 넣어 근데 나도 64같다.
-(cartitem_seq.nextval, 'hong', '64', sysdate);
+(item_no, user_id, product_no, item_amount, item_created_date)
+values 
+(cartitem_seq.nextval, 'hong', 60, 1, sysdate);
+
+insert into sample_users
+(user_id, user_name, user_password)
+values
+('hong', 'gildong', 'zxcv1234');
 
 -- sample_products 테이블에서 64번 상품 삭제하기 -> 오류 참조하고 있는 child record가 있어서 삭제가 안된다.
 -- 자식레코드가 존재하면 부모레코드를 삭제할 수 없다.
